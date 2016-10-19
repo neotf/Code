@@ -6,7 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class DBH {
@@ -19,5 +22,27 @@ public class DBH {
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection conn = DriverManager.getConnection(url,user,password);
 		return conn;
+	}
+	public void close(Connection conn,Statement st,ResultSet rs) throws SQLException{
+		if(conn!=null){
+			conn.close();
+		}
+		if(st!=null){
+			st.close();
+		}
+		if(rs!=null){
+			rs.close();
+		}
+	}
+	public void close(Connection conn,PreparedStatement ps,ResultSet rs) throws SQLException{
+		if(conn!=null){
+			conn.close();
+		}
+		if(ps!=null){
+			ps.close();
+		}
+		if(rs!=null){
+			rs.close();
+		}
 	}
 }
