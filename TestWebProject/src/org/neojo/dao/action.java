@@ -27,6 +27,17 @@ public class action {
 	}
 	public User getUser(int uid){
 		User user = new User();
+		try {
+			Connection conn = db.getConn();
+			PreparedStatement ps = conn.prepareStatement("select status from users where username=?");
+			ps.setString(1, "");
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return user;
 	}
 }
