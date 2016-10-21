@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.neojo.dao.mapper.UserMapper">
+
+   <insert id="save" parameterType="user">
+      insert into users(uid,name,password) values(#{uid},#{name},#{password})
+   </insert>
+
+   <update id="update" parameterType="user">
+      update users set name=#{name},password=#{password} where uid=#{uid}
+   </update>
+
+   <select id="find" parameterType="string" resultType="user">
+      select * from users where uid=#{uid}
+   </select>
+
+   <delete id="delete" parameterType="string">
+      delete from users where uid=#{uid}
+   </delete>
+</mapper>

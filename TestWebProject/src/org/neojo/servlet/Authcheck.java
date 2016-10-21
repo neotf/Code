@@ -1,7 +1,7 @@
 package org.neojo.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+//import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.neojo.dao.action;
 
 public class Authcheck extends HttpServlet {
 	/**
@@ -22,17 +21,17 @@ public class Authcheck extends HttpServlet {
 		resp.setContentType("text/html");
 		resp.setCharacterEncoding("utf-8");
 		String username = req.getParameter("username");
-		String password = req.getParameter("password");
-		action a = new action();
-		int userstatus = a.checkUser(username);
+//		String password = req.getParameter("password");
+//		action a = new action();
+//		int userstatus = a.checkUser(username);
 		
-		PrintWriter out = resp.getWriter();
+//		PrintWriter out = resp.getWriter();
 		
-		if(userstatus>0){
-			a.checkPassword(username, password);
-		}else{
-			out.println("用户状态异常");
-		}
+//		if(userstatus>0){
+//			a.checkPassword(username, password);
+//		}else{
+//			out.println("用户状态异常");
+//		}
 		
 //		
 //		out.println(username+"状态:"+a.checkUser(username));
