@@ -34,7 +34,7 @@ public class Authcheck extends HttpServlet {
 			out.println("Login success");
 			User user = us.GetUser(login);
 			Cookie cookie = new Cookie("name", URLEncoder.encode(user.getName(),"UTF-8"));
-			cookie.setDomain("test.com");
+			cookie.setDomain("local.neojo.org");
 			resp.addCookie(cookie);
 		}else if(login == 0){
 			out.println("User not exist");
