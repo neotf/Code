@@ -1,8 +1,8 @@
 package org.neojo.servlet;
 
 import java.io.IOException;
-//import java.io.PrintWriter;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.neojo.entity.User;
 import org.neojo.service.UserService;
 import org.neojo.service.impl.UserServiceImpl;
 
@@ -31,8 +32,10 @@ public class Authcheck extends HttpServlet {
 		PrintWriter out = resp.getWriter();
 		if (login > 0) {
 			out.println("Login success");
-			Cookie cookies = new Cookie("username", username);
-			resp.addCookie(cookies);
+			User user = us.GetUser(login);
+			Cookie cookie = new Cookie("name", URLEncoder.encode(user.getName(),"UTF-8"));
+			cookie.setDomain("test.com");
+			resp.addCookie(cookie);
 		}else if(login == 0){
 			out.println("User not exist");
 		}else{

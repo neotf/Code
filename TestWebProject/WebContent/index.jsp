@@ -7,6 +7,20 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+ <%
+      
+     Cookie[] cookies = request.getCookies();
+     
+     if(cookies == null) {
+        out.print("没有Cookie信息");
+     } else {
+         for(int i=0; i<cookies.length; i++) {
+            Cookie cookie = cookies[i];
+            String name = cookie.getName();
+            String value = cookie.getValue();
+            out.print(name+":"+value+"<br>");
+         }
+     } 
+    %>
 </body>
 </html>
