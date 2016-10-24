@@ -11,11 +11,15 @@
 		update users set name=#{name},password=#{password} where uid=#{uid}
 	</update>
 
-	<select id="find" parameterType="string" resultType="user">
+	<select id="getUserbyUid" parameterType="int" resultType="user">
 		select * from users where uid=#{uid}
 	</select>
+	
+	<select id="getUserbyUsername" parameterType="String" resultType="user">
+		select * from users where username=#{username}
+	</select>
 
-	<delete id="delete" parameterType="string">
+	<delete id="delete" parameterType="int">
 		delete from users where uid=#{uid}
 	</delete>
 </mapper>
