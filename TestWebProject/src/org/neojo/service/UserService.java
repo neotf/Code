@@ -21,4 +21,11 @@ public interface UserService {
 	 * @return
 	 */
 	public int Login(String username,String password);
+	
+	/**
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public int Register(User user);
 }

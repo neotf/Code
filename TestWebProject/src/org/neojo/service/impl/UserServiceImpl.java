@@ -88,4 +88,19 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public int Register(User user) {
+		SqlSession session = sessionFactory.openSession();
+		try {
+			UserMapper userMapper = session.getMapper(UserMapper.class);
+			userMapper.save(user);
+			session.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return 0;
+	}
+
 }

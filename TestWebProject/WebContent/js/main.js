@@ -1,13 +1,16 @@
-function login(){
-	$.ajax({
-		url : 'auth',
-		type : "POST",
-		data : $('#form').serialize(),
-		error : function(request) {
-			alert("Connection error");
-		},
-		success : function(data) {
-			$("#result").text(JSON.stringify(data));
-		}
-	});
-}
+$(function() {
+	$("#submit").click(function() {
+		$.ajax({
+			url: 'auth',
+			type: "POST",
+			data: $('#form').serialize(),
+			error: function(request) {
+				$("#result").text("Connection error");
+			},
+			success: function(data) {
+				$("#result").text(JSON.stringify(data));
+			}
+		});
+	})
+	
+});

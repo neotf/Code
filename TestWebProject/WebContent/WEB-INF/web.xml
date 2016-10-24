@@ -10,11 +10,19 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   <servlet>
-  <servlet-name>auth</servlet-name>
-  <servlet-class>org.neojo.servlet.Authcheck</servlet-class>
+    <servlet-name>auth</servlet-name>
+    <servlet-class>org.neojo.servlet.Authcheck</servlet-class>
+  </servlet>
+    <servlet>
+    <servlet-name>reg</servlet-name>
+    <servlet-class>org.neojo.servlet.Register</servlet-class>
   </servlet>
   <servlet-mapping>
-  <servlet-name>auth</servlet-name>
-  <url-pattern>/auth</url-pattern>
+    <servlet-name>auth</servlet-name>
+    <url-pattern>/auth</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>reg</servlet-name>
+    <url-pattern>/reg</url-pattern>
   </servlet-mapping>
 </web-app>

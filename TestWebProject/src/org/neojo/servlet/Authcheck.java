@@ -48,7 +48,7 @@ public class Authcheck extends HttpServlet {
 			Cookie cookie = new Cookie("name", URLEncoder.encode(user.getName(), "UTF-8"));
 			cookie.setDomain("local.neojo.org");
 			resp.addCookie(cookie);
-			out.print(new Gson().toJson(new Result(login, "登录成功")));
+			out.print(new Gson().toJson(user));
 		} else if (login == 0) {
 			out.print(new Gson().toJson(new Result(login, "用户不存在")));
 		} else {

@@ -3,23 +3,23 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.neojo.dao.mapper.UserMapper">
 
-	<insert id="save" parameterType="user">
-		insert into users(uid,name,password) values(#{uid},#{name},#{password})
+	<insert id="add" parameterType="user">
+		insert into users(name,sex,phone,email,qq,idno,deptno,job,edtime,username,password,status) values(#{name},#{sex},#{phone},#{email},#{qq},#{idno},#{deptno},#{job},#{edtime},#{username},#{password},#{status})
 	</insert>
 
 	<update id="update" parameterType="user">
-		update users set name=#{name},password=#{password} where uid=#{uid}
+		update users set name=#{name},sex=#{sex},phone=#{phone},email=#{email},qq=#{qq},idno=#{idno},deptno=#{deptno},job=#{job},username=#{username},password=#{password},status=#{status} where uid=#{uid}
 	</update>
 
 	<select id="getUserbyUid" parameterType="int" resultType="user">
-		select * from users where uid=#{uid}
+		select * from users where status!=0 and uid=#{uid} 
 	</select>
 	
 	<select id="getUserbyUsername" parameterType="String" resultType="user">
-		select * from users where username=#{username}
+		select * from users where status!=0 and username=#{username}
 	</select>
 
 	<delete id="delete" parameterType="int">
-		delete from users where uid=#{uid}
+		update users set status=0 where uid=#{uid}
 	</delete>
 </mapper>
