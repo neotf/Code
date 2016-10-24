@@ -1,13 +1,13 @@
 function login(){
 	$.ajax({
 		url : 'auth',
-		type : "GET",
+		type : "POST",
 		data : $('#form').serialize(),
 		error : function(request) {
 			alert("Connection error");
 		},
 		success : function(data) {
-			$("#result").text(data);
+			$("#result").text(JSON.stringify(data));
 		}
 	});
 }

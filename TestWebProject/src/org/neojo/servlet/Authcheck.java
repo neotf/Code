@@ -9,10 +9,14 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.neojo.entity.Result;
 import org.neojo.entity.User;
 import org.neojo.service.UserService;
 import org.neojo.service.impl.UserServiceImpl;
+
+import com.google.gson.Gson;
 
 public class Authcheck extends HttpServlet {
 	/**
@@ -22,27 +26,40 @@ public class Authcheck extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setContentType("text/html");
+		super.doGet(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setContentType("application/json");
 		resp.setCharacterEncoding("utf-8");
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		UserService us = new UserServiceImpl();
 		int login = us.Login(username, password);
-
 		PrintWriter out = resp.getWriter();
 		if (login > 0) {
-			out.println("Login success");
 			User user = us.GetUser(login);
-			Cookie cookie = new Cookie("name", URLEncoder.encode(user.getName(),"UTF-8"));
+			HttpSession session = req.getSession();
+			session.setAttribute("uid", user.getUid());
+			session.setAttribute("deptno", user.getDeptno());
+			session.setAttribute("job", user.getJob());
+			session.setMaxInactiveInterval(60 * 60 * 24);
+			Cookie cookie = new Cookie("name", URLEncoder.encode(user.getName(), "UTF-8"));
 			cookie.setDomain("local.neojo.org");
 			resp.addCookie(cookie);
-		}else if(login == 0){
-			out.println("User not exist");
-		}else{
-			out.println("Error: User error "+login);
+			out.print(new Gson().toJson(new Result(login, "登录成功")));
+		} else if (login == 0) {
+			out.print(new Gson().toJson(new Result(login, "用户不存在")));
+		} else {
+			switch (login) {
+			case -1:
+				out.print(new Gson().toJson(new Result(login, "密码错误")));
+				break;
+			default:
+				out.print(new Gson().toJson(new Result(login, "未知错误")));
+				break;
+			}
 		}
-		
-
-
 	}
 }
