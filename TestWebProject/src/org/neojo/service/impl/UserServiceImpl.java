@@ -93,8 +93,12 @@ public class UserServiceImpl implements UserService {
 		SqlSession session = sessionFactory.openSession();
 		try {
 			UserMapper userMapper = session.getMapper(UserMapper.class);
-			userMapper.save(user);
+			userMapper.add(user);
 			session.commit();
+			user.setPassword(MD5.getMd5(user.getPassword()+"salt"+user.getUid()));
+			userMapper.update(user);
+			session.commit();
+			return 1;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

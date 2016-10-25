@@ -13,7 +13,7 @@
     <servlet-name>auth</servlet-name>
     <servlet-class>org.neojo.servlet.Authcheck</servlet-class>
   </servlet>
-    <servlet>
+  <servlet>
     <servlet-name>reg</servlet-name>
     <servlet-class>org.neojo.servlet.Register</servlet-class>
   </servlet>
@@ -23,6 +23,7 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>reg</servlet-name>
-    <url-pattern>/reg</url-pattern>
+    <url-pattern>*.reg</url-pattern>
   </servlet-mapping>
+
 </web-app>

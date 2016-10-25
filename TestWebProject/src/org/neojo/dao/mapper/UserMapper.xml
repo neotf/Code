@@ -3,8 +3,8 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.neojo.dao.mapper.UserMapper">
 
-	<insert id="add" parameterType="user">
-		insert into users(name,sex,phone,email,qq,idno,deptno,job,edtime,username,password,status) values(#{name},#{sex},#{phone},#{email},#{qq},#{idno},#{deptno},#{job},#{edtime},#{username},#{password},#{status})
+	<insert id="add" useGeneratedKeys="true" keyProperty="uid" parameterType="user">
+		insert into users(name,sex,phone,email,qq,idno,deptno,job,username,password,status) values(#{name},#{sex},#{phone},#{email},#{qq},#{idno},#{deptno},#{job},#{username},#{password},#{status})
 	</insert>
 
 	<update id="update" parameterType="user">
@@ -12,11 +12,11 @@
 	</update>
 
 	<select id="getUserbyUid" parameterType="int" resultType="user">
-		select * from users where status!=0 and uid=#{uid} 
+		select * from users where uid=#{uid} and status <![CDATA[ <> ]]> 0
 	</select>
 	
 	<select id="getUserbyUsername" parameterType="String" resultType="user">
-		select * from users where status!=0 and username=#{username}
+		select * from users where username=#{username} and status <![CDATA[ <> ]]> 0
 	</select>
 
 	<delete id="delete" parameterType="int">
