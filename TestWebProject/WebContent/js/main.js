@@ -12,7 +12,7 @@ $(function() {
 			}
 		});
 	})
-	$("#regsub").click(function() {
+	$("#btn_reg").click(function() {
 		$.ajax({
 			url: 'reg',
 			type: "POST",
@@ -27,7 +27,25 @@ $(function() {
 	})
 	
 	$("#btn_add").click(function () {
-      $("#myModalLabel").text("新增");
+      $("#myModalLabel").text("注册");
       $('#myModal').modal();
     });
 });
+
+function checkuser(){
+    var user = {
+    		username:$("#username").val(),
+        };
+	$.ajax({
+		url: 'reg',
+		type: "GET",
+		dataType:'text',
+		data: user,
+		error: function(request) {
+			$("#result").text("Connection error");
+		},
+		success: function(data) {
+			$("#result").text(JSON.stringify(data));
+		}
+	});
+}

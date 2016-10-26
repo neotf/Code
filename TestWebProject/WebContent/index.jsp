@@ -19,7 +19,7 @@
 				<div id="userbar" align="right">
 
 					<a href='javascript:void(0);' onclick='loginbox();' class='color1'>登陆</a>&nbsp;|&nbsp;
-					<a href='javascript:void(0);' onclick='regbox();' class='color1'>注册</a>
+					<a href='javascript:void(0);' id="btn_add" class='color1'>注册</a>
 
 				</div>
 			</div>
@@ -52,32 +52,31 @@
 									<h4 class="modal-title" id="myModalLabel">新增</h4>
 								</div>
 								<div class="modal-body">
-
+									<form id="register">
 									<div class="form-group">
-										<label for="txt_departmentname">部门名称</label>
-										<input type="text" name="txt_departmentname" class="form-control" id="txt_departmentname" placeholder="部门名称">
+										<label for="username">用户名</label>
+										<input type="text" name="username" id="username" onchange="checkuser();" class="form-control" placeholder="用户名">
 									</div>
 									<div class="form-group">
-										<label for="txt_parentdepartment">上级部门</label>
-										<input type="text" name="txt_parentdepartment" class="form-control" id="txt_parentdepartment" placeholder="上级部门">
+										<label for="password">密码</label>
+										<input type="password" name="password" class="form-control" id="password" placeholder="密码">
 									</div>
 									<div class="form-group">
-										<label for="txt_departmentlevel">部门级别</label>
-										<input type="text" name="txt_departmentlevel" class="form-control" id="txt_departmentlevel" placeholder="部门级别">
+										<label for="name">姓名</label>
+										<input type="text" name="name" class="form-control" placeholder="姓名">
 									</div>
 									<div class="form-group">
-										<label for="txt_statu">描述</label>
-										<input type="text" name="txt_statu" class="form-control" id="txt_statu" placeholder="状态">
+										<label for="phone">手机号</label>
+										<input type="text" name="statu" class="form-control" placeholder="手机号">
 									</div>
+									</form>
 								</div>
 								<div class="modal-footer">
-									<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
-									<button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存</button>
+									<button type="button" id="btn_reg" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>注册</button>
 								</div>
 							</div>
 						</div>
 					</div>
-					<input type="button" value="add" id="btn_add" />
 					<%
 					Cookie[] cookies = request.getCookies();
 					if (cookies == null) {

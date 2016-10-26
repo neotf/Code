@@ -23,12 +23,22 @@ public class Register extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String URI = req.getRequestURI();
-		
+		// String URI = req.getRequestURI();
+		String username = req.getParameter("username");
+		UserService us = new UserServiceImpl();
+		int status = us.CheckUserStatus(username);
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("utf-8");
 		PrintWriter out = resp.getWriter();
-		out.print(new Gson().toJson(new Result(1, "")));
+		if (username != null && username.length()>=5) {
+			if (status == 0) {
+				out.print(new Gson().toJson(new Result(0, "可以使用此用户名")));
+			} else {
+				out.print(new Gson().toJson(new Result(-1, "此用户名已被注册")));
+			}
+		} else {
+			out.print(new Gson().toJson(new Result(-999, "你们想干什么")));
+		}
 	}
 
 	@Override
