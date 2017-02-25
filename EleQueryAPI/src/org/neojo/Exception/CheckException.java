@@ -1,15 +1,15 @@
 package org.neojo.Exception;
 
-public class LoginException extends Exception{
+public class CheckException extends Exception{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public LoginException() {
+	public CheckException() {
 		super();
 	}
-	public LoginException(String str) {
+	public CheckException(String str) {
 		super(str);
 	}
 }

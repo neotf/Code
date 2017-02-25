@@ -2,6 +2,7 @@ package org.neojo.test;
 
 import java.io.IOException;
 
+import org.neojo.Exception.CheckException;
 import org.neojo.Exception.LoginException;
 import org.neojo.entity.Dormitory;
 import org.neojo.service.ElectricityQuery;
@@ -23,6 +24,9 @@ public class Test {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (LoginException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CheckException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

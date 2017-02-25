@@ -11,6 +11,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.neojo.Exception.CheckException;
 import org.neojo.Exception.LoginException;
 import org.neojo.entity.BuyLog;
 import org.neojo.entity.Dormitory;
@@ -60,7 +61,7 @@ public final class ElectricityQuery {
 		return html;
 	}
 
-	private String GetUsedLog(int day) throws ClientProtocolException, IOException {
+	private String GetUsedLog(int day) throws ClientProtocolException, IOException, CheckException {
 		int page = (day - 1) / 10 + 1;
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -97,6 +98,7 @@ public final class ElectricityQuery {
 			HttpStatus = httpResponse.getStatusLine().getStatusCode();
 			httpEntity = httpResponse.getEntity();
 			String html = EntityUtils.toString(httpEntity);
+			TextParse.checkhtml(html);
 			log.addAll(TextParse.parseUsedLog(html));
 		}		
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
@@ -113,7 +115,7 @@ public final class ElectricityQuery {
 		return html;
 	}
 
-	private String GetBuyLog(int day) throws ClientProtocolException, IOException {
+	private String GetBuyLog(int day) throws ClientProtocolException, IOException, CheckException {
 		java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		int page = 2;
 
@@ -141,6 +143,7 @@ public final class ElectricityQuery {
 			HttpStatus = httpResponse.getStatusLine().getStatusCode();
 			httpEntity = httpResponse.getEntity();
 			String html = EntityUtils.toString(httpEntity);
+			TextParse.checkhtml(html);
 			page = TextParse.getPage(html);
 			List<BuyLog> tlog = TextParse.parseBuyLog(html);
 			log.addAll(tlog);
@@ -186,7 +189,7 @@ public final class ElectricityQuery {
 			} else if ("drceng".equals(__EVENTTARGET)) {
 				Login("drfangjian");
 			} else {
-				throw new LoginException();
+				throw new LoginException("登录错误");
 			}
 		} else if (HttpStatus == 302) {
 			httpPost.abort();
@@ -225,11 +228,11 @@ public final class ElectricityQuery {
 		return new Gson().toJson(TextParse.parseBalance(GetUsedPage()));
 	}
 
-	private String queryUsedLog(int day) throws ClientProtocolException, IOException {
+	private String queryUsedLog(int day) throws ClientProtocolException, IOException, CheckException {
 		return GetUsedLog(day);
 	}
 
-	private String queryBuyLog(int day) throws ClientProtocolException, IOException {
+	private String queryBuyLog(int day) throws ClientProtocolException, IOException, CheckException {
 		return GetBuyLog(day);
 	}
 
@@ -251,7 +254,7 @@ public final class ElectricityQuery {
 		return queryBalance();
 	}
 
-	public String checkUsedLog(int day) throws ClientProtocolException, IOException, LoginException {
+	public String checkUsedLog(int day) throws ClientProtocolException, IOException, LoginException, CheckException {
 		this.type = "usedR";
 		Login("");
 		GetUsedPage();
@@ -259,21 +262,21 @@ public final class ElectricityQuery {
 	}
 
 	public String checkUsedLog(String __VIEWSTATE, int day)
-			throws ClientProtocolException, IOException, LoginException {
+			throws ClientProtocolException, IOException, LoginException, CheckException {
 		this.type = "usedR";
 		Login("");
 		GetUsedPage();
 		return queryUsedLog(day);
 	}
 
-	public String checkBuyLog(int day) throws ClientProtocolException, IOException, LoginException {
+	public String checkBuyLog(int day) throws ClientProtocolException, IOException, LoginException, CheckException {
 		this.type = "buyR";
 		Login("");
 		GetBuyPage();
 		return queryBuyLog(day);
 	}
 
-	public String checkBuyLog(String __VIEWSTATE, int day) throws ClientProtocolException, IOException, LoginException {
+	public String checkBuyLog(String __VIEWSTATE, int day) throws ClientProtocolException, IOException, LoginException, CheckException {
 		this.type = "buyR";
 		Login("");
 		GetBuyPage();

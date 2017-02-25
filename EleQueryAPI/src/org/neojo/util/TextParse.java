@@ -8,6 +8,7 @@ import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.neojo.Exception.CheckException;
 import org.neojo.entity.BuyLog;
 import org.neojo.entity.Electricity;
 import org.neojo.entity.UseLog;
@@ -83,5 +84,13 @@ public class TextParse {
 				}
 		}
 		return buylogs;
+	}
+	
+	public static String checkhtml(String html) throws CheckException{
+		if(html.indexOf("网络繁忙，请稍后再试")>=0){
+			throw new CheckException("网络繁忙，请稍后再试");
+		}else{
+			return null;
+		}
 	}
 }

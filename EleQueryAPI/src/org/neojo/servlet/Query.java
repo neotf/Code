@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.neojo.Exception.CheckException;
 import org.neojo.Exception.LoginException;
 import org.neojo.entity.Dormitory;
 import org.neojo.entity.Result;
@@ -101,6 +102,8 @@ public class Query extends HttpServlet {
 						}
 					} catch (LoginException e) {
 						out.print(new Gson().toJson(new Result(-2, e.getMessage())));
+					} catch (CheckException e) {
+						out.print(new Gson().toJson(new Result(-5, e.getMessage())));
 					}
 				} else {
 					out.print(new Gson().toJson(new Result(-3, "None Room")));
