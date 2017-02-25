@@ -12,8 +12,13 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.neojo.Exception.LoginException;
+import org.neojo.entity.BuyLog;
 import org.neojo.entity.Dormitory;
+import org.neojo.entity.UseLog;
 import org.neojo.util.TextParse;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -58,30 +63,33 @@ public final class ElectricityQuery {
 	private String GetUsedLog(int day) throws ClientProtocolException, IOException {
 		int page = (day - 1) / 10 + 1;
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		Calendar tempfirstday = Calendar.getInstance();
-		Calendar templastday = Calendar.getInstance();
-		templastday.add(Calendar.DAY_OF_MONTH, -day + 1);
-		String lastday;
-		String firstday;
-		StringBuffer sb = new StringBuffer();
+
+		Calendar tempstartday = Calendar.getInstance();
+		tempstartday.add(Calendar.DAY_OF_MONTH, -9);
+		Calendar tempendday = Calendar.getInstance();
+
+		String startday;
+		String endday;
+
 		httpPost = new HttpPost(URL_PATH_GET_USED);
-		String[] ret = new String[page];
-		for (int i = 1; i <= page; i++) {
+
+		List<UseLog> log = new ArrayList<>();
+		for (int i = page; i >= 0; i--) {
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair("__VIEWSTATE", __VIEWSTATE));
 			params.add(new BasicNameValuePair("__EVENTVALIDATION", __EVENTVALIDATION));
-			lastday = format.format(templastday.getTime());
-			params.add(new BasicNameValuePair("txtstart", lastday));
-			tempfirstday = (Calendar) templastday.clone();
-			tempfirstday.add(Calendar.DAY_OF_MONTH, 9);
-			templastday = (Calendar) tempfirstday.clone();
-			templastday.add(Calendar.DAY_OF_MONTH, 1);
-			if (i != page) {
-				firstday = format.format(tempfirstday.getTime());
+			startday = format.format(tempstartday.getTime());
+			endday = format.format(tempendday.getTime());
+			params.add(new BasicNameValuePair("txtstart", startday));
+			params.add(new BasicNameValuePair("txtend", endday));
+			if (i == 1) {
+				tempstartday = Calendar.getInstance();
+				tempstartday.add(Calendar.DAY_OF_MONTH, -day);
+				tempendday.add(Calendar.DAY_OF_MONTH, -10);
 			} else {
-				firstday = format.format(Calendar.getInstance().getTime());
+				tempstartday.add(Calendar.DAY_OF_MONTH, -11);
+				tempendday.add(Calendar.DAY_OF_MONTH, -10);
 			}
-			params.add(new BasicNameValuePair("txtend", firstday));
 			params.add(new BasicNameValuePair("btnser", "查询"));
 			UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(params, "UTF-8");
 			httpPost.setEntity(urlEncodedFormEntity);
@@ -89,19 +97,10 @@ public final class ElectricityQuery {
 			HttpStatus = httpResponse.getStatusLine().getStatusCode();
 			httpEntity = httpResponse.getEntity();
 			String html = EntityUtils.toString(httpEntity);
-			ret[i - 1] = TextParse.parseUsedLog(html);
-		}
-		for (int i = ret.length; i > 0; i--) {
-			if (i == ret.length)
-				sb.append("[");
-			sb.append(ret[i - 1]);
-			if (i == 1) {
-				sb.append("]");
-			} else {
-				sb.append(",");
-			}
-		}
-		return sb.toString();
+			log.addAll(TextParse.parseUsedLog(html));
+		}		
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+		return gson.toJson(log);
 	}
 
 	private String GetBuyPage() throws ClientProtocolException, IOException {
@@ -116,23 +115,41 @@ public final class ElectricityQuery {
 
 	private String GetBuyLog(int day) throws ClientProtocolException, IOException {
 		java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_MONTH, -day +1 );
+		int page = 2;
+
+		Calendar tempstartday = Calendar.getInstance();
+		tempstartday.add(Calendar.DAY_OF_MONTH, -day);
+		Calendar tempendday = Calendar.getInstance();
+		String startday;
+		String endday;
+
 		httpPost = new HttpPost(URL_PATH_GET_BUY);
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("__VIEWSTATE", __VIEWSTATE));
-		params.add(new BasicNameValuePair("__EVENTVALIDATION", __EVENTVALIDATION));
-		params.add(new BasicNameValuePair("txtstart", format.format(cal.getTime())));
-		params.add(new BasicNameValuePair("txtend", format.format(Calendar.getInstance().getTime())));
-		params.add(new BasicNameValuePair("btnser", "查询"));
-		UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(params, "UTF-8");
-		httpPost.setEntity(urlEncodedFormEntity);
-		httpResponse = httpclient.execute(httpPost);
-		HttpStatus = httpResponse.getStatusLine().getStatusCode();
-		httpEntity = httpResponse.getEntity();
-		String html = EntityUtils.toString(httpEntity);
-		
-		return html;
+
+		List<BuyLog> log = new ArrayList<>();
+		for (int i = page; i >= 0; i--) {
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			params.add(new BasicNameValuePair("__VIEWSTATE", __VIEWSTATE));
+			params.add(new BasicNameValuePair("__EVENTVALIDATION", __EVENTVALIDATION));
+			startday = format.format(tempstartday.getTime());
+			endday = format.format(tempendday.getTime());
+			params.add(new BasicNameValuePair("txtstart", startday));
+			params.add(new BasicNameValuePair("txtend", endday));
+			params.add(new BasicNameValuePair("btnser", "查询"));
+			UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(params, "UTF-8");
+			httpPost.setEntity(urlEncodedFormEntity);
+			httpResponse = httpclient.execute(httpPost);
+			HttpStatus = httpResponse.getStatusLine().getStatusCode();
+			httpEntity = httpResponse.getEntity();
+			String html = EntityUtils.toString(httpEntity);
+			page = TextParse.getPage(html);
+			List<BuyLog> tlog = TextParse.parseBuyLog(html);
+			log.addAll(tlog);
+			if(page==1)break;
+			tempendday.setTime(tlog.get(tlog.size()-1).getDate());
+			tempendday.add(Calendar.DAY_OF_MONTH, -1);
+		}
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+		return gson.toJson(log);
 	}
 
 	private void Login(String __EVENTTARGET) throws ClientProtocolException, IOException, LoginException {
@@ -205,7 +222,7 @@ public final class ElectricityQuery {
 	}
 
 	private String queryBalance() throws ClientProtocolException, IOException {
-		return TextParse.parseBalance(GetUsedPage());
+		return new Gson().toJson(TextParse.parseBalance(GetUsedPage()));
 	}
 
 	private String queryUsedLog(int day) throws ClientProtocolException, IOException {
@@ -213,7 +230,7 @@ public final class ElectricityQuery {
 	}
 
 	private String queryBuyLog(int day) throws ClientProtocolException, IOException {
-		return TextParse.parseBuyLog(GetBuyLog(day));
+		return GetBuyLog(day);
 	}
 
 	public String getViewState() throws ClientProtocolException, IOException, LoginException {
