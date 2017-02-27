@@ -16,7 +16,7 @@ public class GetEleInfo {
 		BufferedReader in = null;
 		String rs = null;
 		try {
-			URL realUrl = new URL("https://api.neojo.org/EleQueryAPI/Query");
+			URL realUrl = new URL("http://localhost:8080/EleQueryAPI/Query");
 			SSLTrust.ignoreSsl();
 			URLConnection conn = realUrl.openConnection();
 			conn.setRequestProperty("accept", "*/*");

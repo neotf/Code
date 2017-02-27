@@ -17,7 +17,7 @@ import org.neojo.util.GetEleInfo;
 import com.google.gson.Gson;
 
 public class PushService {
-
+	
 	private static void service() {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		ListPush lp = new ListPush();
@@ -27,29 +27,30 @@ public class PushService {
 			Gson gson = new Gson();
 			Electricity ele = new Electricity();
 			String json = GetEleInfo.getEle(c.getBuild(), c.getFloor(), c.getRoom(), c.getViewState());
-			ele = gson.fromJson(json, Electricity.class);
+			ele = gson.fromJson(json, Result.class).getData();
+			
 			if (ele.getNormal() == null) {
 				Result rs = gson.fromJson(json, Result.class);
-				System.out.println("[" + format.format(Calendar.getInstance().getTime()) + "][查询失败 ]失败代码："+rs.getId()+":"+rs.getMsg());
+				System.out.println("[" + format.format(Calendar.getInstance().getTime()) + "][查询失败 ]失败代码："+rs.getCode()+":"+rs.getMsg());
 			} else {
 				if (ele.getNormal() <= 30) {
 					String msg = "您好！您的剩余普通用电" + ele.getNormal() + "度，空调用电" + ele.getAirConditioner()
 							+ "度，请及时充值。【黑箱科技】";
 					Result rs = SmsSend.sendPost(c.getPhone(), msg);
-					if (rs.getId() > 0)
+					if (rs.getCode() > 0)
 						sum++;
 					System.out.println("[" + format.format(Calendar.getInstance().getTime()) + "]["
-							+ (rs.getId() > 0 ? "推送成功" : "推送失败") + "]余额警告：" + rs.getMsg() + ":" + c.getBuild() + "-"
+							+ (rs.getCode() > 0 ? "推送成功" : "推送失败") + "]余额警告：" + rs.getMsg() + ":" + c.getBuild() + "-"
 							+ c.getFloor() + "-" + c.getRoom() + ":" + ele.getNormal() + "," + ele.getAirConditioner());
 				} else {
 					if ("daily".equals(c.getType())) {
 						String msg = "您好！您的剩余普通用电" + ele.getNormal() + "度，空调用电" + ele.getAirConditioner()
 								+ "度，黑箱科技将为您持续关注您的用电情况。【黑箱科技】";
 						Result rs = SmsSend.sendPost(c.getPhone(), msg);
-						if (rs.getId() > 0)
+						if (rs.getCode() > 0)
 							sum++;
 						System.out.println("[" + format.format(Calendar.getInstance().getTime()) + "]["
-								+ (rs.getId() > 0 ? "推送成功" : "推送失败") + "]余额提醒：" + rs.getMsg() + ":" + c.getBuild() + "-"
+								+ (rs.getCode() > 0 ? "推送成功" : "推送失败") + "]余额提醒：" + rs.getMsg() + ":" + c.getBuild() + "-"
 								+ c.getFloor() + "-" + c.getRoom() + ":" + ele.getNormal() + ","
 								+ ele.getAirConditioner());
 					} else {

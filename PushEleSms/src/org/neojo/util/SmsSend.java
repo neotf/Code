@@ -45,12 +45,12 @@ public class SmsSend {
 			for (int i = 0; i < childNodes.getLength(); i++) {
 				Node node = childNodes.item(i);
 				if ("result".equals(node.getNodeName()))
-					rs.setId(Integer.parseInt(childNodes.item(i).getTextContent()));
+					rs.setCode(Integer.parseInt(childNodes.item(i).getTextContent()));
 				if ("message".equals(node.getNodeName()))
 					rs.setMsg(childNodes.item(i).getTextContent());
 			}
 		}catch (ConnectException e){
-			rs.setId(-1000);
+			rs.setCode(-1000);
 			rs.setMsg("调用错误：网络连接失败");
 		} catch (Exception e) {
 			e.printStackTrace();
