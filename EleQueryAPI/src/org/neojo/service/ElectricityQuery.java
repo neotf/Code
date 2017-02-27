@@ -15,11 +15,9 @@ import org.neojo.Exception.CheckException;
 import org.neojo.Exception.LoginException;
 import org.neojo.entity.BuyLog;
 import org.neojo.entity.Dormitory;
+import org.neojo.entity.Electricity;
 import org.neojo.entity.UseLog;
 import org.neojo.util.TextParse;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -61,7 +59,7 @@ public final class ElectricityQuery {
 		return html;
 	}
 
-	private String GetUsedLog(int day) throws ClientProtocolException, IOException, CheckException {
+	private List<UseLog> GetUsedLog(int day) throws ClientProtocolException, IOException, CheckException {
 		int page = (day - 1) / 10 + 1;
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -101,8 +99,7 @@ public final class ElectricityQuery {
 			TextParse.checkhtml(html);
 			log.addAll(TextParse.parseUsedLog(html));
 		}		
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-		return gson.toJson(log);
+		return log;
 	}
 
 	private String GetBuyPage() throws ClientProtocolException, IOException {
@@ -115,7 +112,7 @@ public final class ElectricityQuery {
 		return html;
 	}
 
-	private String GetBuyLog(int day) throws ClientProtocolException, IOException, CheckException {
+	private List<BuyLog> GetBuyLog(int day) throws ClientProtocolException, IOException, CheckException {
 		java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		int page = 2;
 
@@ -151,8 +148,7 @@ public final class ElectricityQuery {
 			tempendday.setTime(tlog.get(tlog.size()-1).getDate());
 			tempendday.add(Calendar.DAY_OF_MONTH, -1);
 		}
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-		return gson.toJson(log);
+		return log;
 	}
 
 	private void Login(String __EVENTTARGET) throws ClientProtocolException, IOException, LoginException {
@@ -224,15 +220,15 @@ public final class ElectricityQuery {
 		}
 	}
 
-	private String queryBalance() throws ClientProtocolException, IOException {
-		return new Gson().toJson(TextParse.parseBalance(GetUsedPage()));
+	private Electricity queryBalance() throws ClientProtocolException, IOException {
+		return TextParse.parseBalance(GetUsedPage());
 	}
 
-	private String queryUsedLog(int day) throws ClientProtocolException, IOException, CheckException {
+	private List<UseLog> queryUsedLog(int day) throws ClientProtocolException, IOException, CheckException {
 		return GetUsedLog(day);
 	}
 
-	private String queryBuyLog(int day) throws ClientProtocolException, IOException, CheckException {
+	private List<BuyLog> queryBuyLog(int day) throws ClientProtocolException, IOException, CheckException {
 		return GetBuyLog(day);
 	}
 
@@ -242,26 +238,26 @@ public final class ElectricityQuery {
 		return __VIEWSTATE;
 	}
 
-	public String checkBalance() throws ClientProtocolException, IOException, LoginException {
+	public Electricity checkBalance() throws ClientProtocolException, IOException, LoginException {
 		this.type = "usedR";
 		Login("");
 		return queryBalance();
 	}
 
-	public String checkBalance(String __VIEWSTATE) throws ClientProtocolException, IOException, LoginException {
+	public Electricity checkBalance(String __VIEWSTATE) throws ClientProtocolException, IOException, LoginException {
 		this.type = "usedR";
 		fastLogin(__VIEWSTATE);
 		return queryBalance();
 	}
 
-	public String checkUsedLog(int day) throws ClientProtocolException, IOException, LoginException, CheckException {
+	public List<UseLog> checkUsedLog(int day) throws ClientProtocolException, IOException, LoginException, CheckException {
 		this.type = "usedR";
 		Login("");
 		GetUsedPage();
 		return queryUsedLog(day);
 	}
 
-	public String checkUsedLog(String __VIEWSTATE, int day)
+	public List<UseLog> checkUsedLog(String __VIEWSTATE, int day)
 			throws ClientProtocolException, IOException, LoginException, CheckException {
 		this.type = "usedR";
 		Login("");
@@ -269,14 +265,14 @@ public final class ElectricityQuery {
 		return queryUsedLog(day);
 	}
 
-	public String checkBuyLog(int day) throws ClientProtocolException, IOException, LoginException, CheckException {
+	public List<BuyLog> checkBuyLog(int day) throws ClientProtocolException, IOException, LoginException, CheckException {
 		this.type = "buyR";
 		Login("");
 		GetBuyPage();
 		return queryBuyLog(day);
 	}
 
-	public String checkBuyLog(String __VIEWSTATE, int day) throws ClientProtocolException, IOException, LoginException, CheckException {
+	public List<BuyLog> checkBuyLog(String __VIEWSTATE, int day) throws ClientProtocolException, IOException, LoginException, CheckException {
 		this.type = "buyR";
 		Login("");
 		GetBuyPage();

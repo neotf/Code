@@ -1,6 +1,8 @@
 package org.neojo.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class version
  */
-@WebServlet("/version")
+@WebServlet("/")
 public class version extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -27,7 +29,9 @@ public class version extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Version:").append("2017-2-25 23:06:46");
+		PrintWriter out = response.getWriter();
+		out.println("EleQueryAPI");
+		out.println("Version:"+"2017-2-27 17:02:14");
 	}
 
 	/**

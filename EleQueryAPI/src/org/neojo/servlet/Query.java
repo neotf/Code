@@ -16,6 +16,7 @@ import org.neojo.entity.Result;
 import org.neojo.service.ElectricityQuery;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * Servlet implementation class Query
@@ -58,6 +59,7 @@ public class Query extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 		String type = request.getParameter("type");
 		String sbuild = request.getParameter("build");
 		String sfloor = request.getParameter("floor");
@@ -83,21 +85,21 @@ public class Query extends HttpServlet {
 					try {
 						if (__VIEWSTATE == null) {
 							if ("balance".equals(type)) {
-								out.print(qur.checkBalance());
+								out.print(gson.toJson(new Result(1,"Success",qur.checkBalance())));
 							} else if ("uselog".equals(type)) {
-								out.print(qur.checkUsedLog(day == 0 ? 7 : day));
+								out.print(gson.toJson(new Result(1,"Success",qur.checkUsedLog(day == 0 ? 7 : day))));
 							} else if ("buylog".equals(type)) {
-								out.print(qur.checkBuyLog(day == 0 ? 300 : day));
+								out.print(gson.toJson(new Result(1,"Success",qur.checkBuyLog(day == 0 ? 300 : day))));
 							} else if ("getvs".equals(type)){
-								out.print(qur.getViewState());
+								out.print(gson.toJson(new Result(1,"Success",qur.getViewState())));
 							}
 						} else {
 							if ("balance".equals(type)) {
-								out.print(qur.checkBalance(__VIEWSTATE));
+								out.print(gson.toJson(new Result(1,"Success",qur.checkBalance(__VIEWSTATE))));
 							} else if ("uselog".equals(type)) {
-								out.print(qur.checkUsedLog(__VIEWSTATE, day == 0 ? 7 : day));
+								out.print(gson.toJson(new Result(1,"Success",qur.checkUsedLog(__VIEWSTATE, day == 0 ? 7 : day))));
 							} else if ("buylog".equals(type)) {
-								out.print(qur.checkBuyLog(__VIEWSTATE, day == 0 ? 300 : day));
+								out.print(gson.toJson(new Result(1,"Success",qur.checkBuyLog(__VIEWSTATE, day == 0 ? 300 : day))));
 							}
 						}
 					} catch (LoginException e) {

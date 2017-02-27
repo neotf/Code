@@ -1,27 +1,43 @@
 package org.neojo.entity;
 
 public class Result {
-	private int id;
+	private int code;
 	private String msg;
+	private Object data;
 	
-	public Result(int id, String msg) {
+	public Result(int code ,String msg, Object data) {
 		super();
-		this.id = id;
+		this.code = code;
+		this.data = data;
+		this.msg = msg;
+	}
+	
+	public Result(int code ,String msg) {
+		super();
+		this.code = code;
 		this.msg = msg;
 	}
 	
 	public Result(){}
 	
-	public int getId() {
-		return id;
+	public int getCode() {
+		return code;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setCode(int code) {
+		this.code = code;
 	}
 	public String getMsg() {
 		return msg;
 	}
+
 	public void setMsg(String msg) {
 		this.msg = msg;
+	}
+
+	public Object getData() {
+		return data;
+	}
+	public void setData(Object data) {
+		this.data = data;
 	}
 }
